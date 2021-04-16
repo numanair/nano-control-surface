@@ -3,6 +3,9 @@
 #include <avr/power.h>
 #include "lgtx8p.h"
 
+const int ADC_bits = 10; // 10 or 12-bit
+const int MaxADC = 1016; // 4064 for 12-bit or 1016 for 10-bit
+
 // MIDI Interface for use with Hairless
 //USBMIDI_Interface midi;
 HairlessMIDI_Interface midi;
@@ -19,6 +22,8 @@ CCPotentiometer volumePotentiometers[] = {
 
 // Initialize the Control Surface
 void setup() {
+  analogReference(DEFAULT);
+  analogReadResolution(ADC_bits);
   Control_Surface.begin();
 }
 
