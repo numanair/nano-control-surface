@@ -3,7 +3,7 @@
 
 // MIDI Interface for use with Hairless
 //USBMIDI_Interface midi;
-HairlessMIDI_Interface midi;
+USBMIDI_Interface midi;
 
 // Potentiometer array only sends MIDI
 // messages when a value changes
