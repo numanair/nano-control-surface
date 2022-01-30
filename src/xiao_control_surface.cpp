@@ -20,14 +20,20 @@ CCPotentiometer volumePotentiometers[] = {
 // make sure Control Surface is using 12-bit ADC 
 constexpr uint8_t ADC_BITS = 12;
 
-int inputval[] =  {20, 16383};
-int outputval[] = {0,  16383};
+// int inputval[] =  {35,	128,	580,	1412,	3636,	16256};
+// int outputval[] = {0,	1364,	2728,	4092,	5456,	16383};
+
+int inputval[] =  {40, 1365, 2730, 4096, 5461, 6826, 8192, 9557, 10922, 12288, 13653, 15018, 16384};
+int outputval[] = {0, 900, 2000, 3200, 4800, 6550, 8192, 9557, 10922, 12288, 13653, 15018, 16384};
+
+// int inputval[] =  {25,	180,	620,	1390,	3620,	5680,	7890,	10180,	12380,	14580,	15690,	16120,	16350};
+// int outputval[] = {0,	1365,	2730,	4096,	5461,	6826,	8192,	9557,	10922,	12288,	13653,	15018,	16383};
 // Note: 16383 = 2¹⁴ - 1 (the maximum value that can be represented by
 // a 14-bit unsigned number
-const int arrayQty = 2;
+const int arrayQty = sizeof(inputval) / sizeof(inputval[0]);
 // number of elements in the MultiMap arrays
 
-Timer<millis> timer = 500; // milliseconds between sending serial data
+Timer<millis> timer = 10; // milliseconds between sending serial data
 
 // note: the _in array must have increasing values
 // same function as MultiMap Arduino library
@@ -63,6 +69,7 @@ void setup() {
   volumePotentiometers.map(mappingFunction);
   Control_Surface.begin();
   Serial.begin(115200);
+  // Start serial for Deej
 }
 
 // Update the Control Surface
@@ -70,7 +77,6 @@ void loop() {
   Control_Surface.loop();
   for (size_t i = 0; i < 5; i++)
   {
-  // Serial.println(volumePotentiometers[1].getRawValue());
     if (timer)
     {
     sendSliderValues();
@@ -78,11 +84,12 @@ void loop() {
   }
 }
 
+// Deej Serial Support
 void sendSliderValues() {
   String builtString = String("");
-
   for (int i = 0; i < NUM_SLIDERS; i++) {
-    builtString += String((int)volumePotentiometers[i].getRawValue());
+    //builtString += String((int)volumePotentiometers[i].getRawValue()); // raw
+    builtString += String((int)volumePotentiometers[i].getValue()); // filtered
     if (i < NUM_SLIDERS - 1) {
       builtString += String("|");
     }
