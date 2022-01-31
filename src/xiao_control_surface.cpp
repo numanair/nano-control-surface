@@ -1,10 +1,14 @@
 #include <Arduino.h>
 #include <Control_Surface.h>
 
+// Number of potentiometers or faders
 const int NUM_SLIDERS = 5;
 
-// MIDI Interface for use with Hairless
-//HairlessMIDI_Interface midi;
+// Adjusts linearity correction for my specific potentiometers.
+// 1 = fully linear but jittery. 0.7 is about max for no jitter.
+const float correctionMultiplier = 0.8;
+
+// MIDI over USB :)
 USBMIDI_Interface midi;
 
 // Potentiometer array only sends MIDI
@@ -20,18 +24,42 @@ CCPotentiometer volumePotentiometers[] = {
 // make sure Control Surface is using 12-bit ADC 
 constexpr uint8_t ADC_BITS = 12;
 
+// minimal datapoints
 // int inputval[] =  {35,	128,	580,	1412,	3636,	16256};
 // int outputval[] = {0,	1364,	2728,	4092,	5456,	16383};
 
-int inputval[] =  {40, 1365, 2730, 4096, 5461, 6826, 8192, 9557, 10922, 12288, 13653, 15018, 16384};
-int outputval[] = {0, 900, 2000, 3200, 4800, 6550, 8192, 9557, 10922, 12288, 13653, 15018, 16384};
+// works decently
+// int inputval[] =  {30, 1365, 2730, 4096, 5461, 6826, 8192, 9557, 10922, 12288, 13653, 15018, 16384};
+// int outputval[] = {0, 900, 2000, 3200, 4800, 6550, 8192, 9557, 10922, 12288, 13653, 15018, 16384};
 
-// int inputval[] =  {25,	180,	620,	1390,	3620,	5680,	7890,	10180,	12380,	14580,	15690,	16120,	16350};
+// symetrical mild correction
+// int inputval[] = {26, 900, 2000, 3200, 4800, 6550, 8192, 9833, 11583, 13184, 14383, 15483, 16384};
+// int outputval[] = {0, 1365, 2730, 4096, 5461, 6826, 8192, 9557, 10922, 12288, 13653, 15018, 16384};
+
+// 0.6 strength multiplier correction, no jitter
+// int inputval[] =  {15, 666, 1488, 2628, 4361, 6210, 8017, 9931, 11797, 13663, 14875, 15679, 16364};
 // int outputval[] = {0,	1365,	2730,	4096,	5461,	6826,	8192,	9557,	10922,	12288,	13653,	15018,	16383};
+
+// 0.8 strength multiplier correction, seemingly slight jitter
+// int inputval[] =  {20, 433, 1074, 2139, 3995, 6005, 7958, 10055, 12088, 14122, 15283, 15900, 16357};
+// int outputval[] = {0,	1365,	2730,	4096,	5461,	6826,	8192,	9557,	10922,	12288,	13653,	15018,	16383};
+
+// 0.75 strength multiplier correction, jitter?
+// int inputval[] =  {19,491,1178,2262,4086,6057,7973,10024,12016,14007,15181,15845,16359};
+// int outputval[] = {0,	1365,	2730,	4096,	5461,	6826,	8192,	9557,	10922,	12288,	13653,	15018,	16383};
+
+// completely corrective (too jittery at outer bounds)
+// int inputval[] =  {26, 200, 660, 1650, 3628, 5800, 7900, 10180, 12380, 14580, 15690, 16120, 16350};
+// int outputval[] = {0,	1365,	2730,	4096,	5461,	6826,	8192,	9557,	10922,	12288,	13653,	15018,	16383};
+
 // Note: 16383 = 2¹⁴ - 1 (the maximum value that can be represented by
 // a 14-bit unsigned number
-const int arrayQty = sizeof(inputval) / sizeof(inputval[0]);
+
+int measuredInput[] = {25, 200,  660,  1650, 3628, 5800, 7900, 10180, 12380, 14580, 15690, 16120, 16350};
+int idealOutputValues[] = {0,  1365, 2730, 4096, 5461, 6826, 8192, 9557,  10922, 12288, 13653, 15018, 16383};
 // number of elements in the MultiMap arrays
+const int arrayQty = sizeof(measuredInput) / sizeof(measuredInput[0]);
+int adjustedinputval[arrayQty] = {0};
 
 Timer<millis> timer = 10; // milliseconds between sending serial data
 
@@ -56,7 +84,7 @@ int multiMap(int val, int* _in, int* _out, uint8_t size)
 }
 
 analog_t mappingFunction(analog_t raw) {
-    int mapped = multiMap(raw, inputval, outputval, arrayQty);
+    int mapped = multiMap(raw, adjustedinputval, idealOutputValues, arrayQty);
     // adjusts slider output for better linearity
     return mapped;
 }
@@ -67,9 +95,17 @@ void sendSliderValues();
 void setup() {
   for (auto &volumePotentiometers : volumePotentiometers)
   volumePotentiometers.map(mappingFunction);
+  analogReadResolution(12);
   Control_Surface.begin();
   Serial.begin(115200);
   // Start serial for Deej
+
+  // multiplier correction
+  for (size_t i = 0; i < arrayQty; i++)
+  {
+    adjustedinputval[i] = round(idealOutputValues[i] + (measuredInput[i] - idealOutputValues[i]) * correctionMultiplier);
+    // theoretical ideal + (measured - theoretical)*multi
+  }
 }
 
 // Update the Control Surface
@@ -88,7 +124,7 @@ void loop() {
 void sendSliderValues() {
   String builtString = String("");
   for (int i = 0; i < NUM_SLIDERS; i++) {
-    //builtString += String((int)volumePotentiometers[i].getRawValue()); // raw
+    // builtString += String((int)volumePotentiometers[i].getRawValue()); // raw
     builtString += String((int)volumePotentiometers[i].getValue()); // filtered
     if (i < NUM_SLIDERS - 1) {
       builtString += String("|");
