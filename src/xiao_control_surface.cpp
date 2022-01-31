@@ -6,7 +6,7 @@ const int NUM_SLIDERS = 5;
 
 // Adjusts linearity correction for my specific potentiometers.
 // 1 = fully linear but jittery. 0.7 is about max for no jitter.
-const float correctionMultiplier = 0.8;
+const float correctionMultiplier = 0.78;
 
 // MIDI over USB :)
 USBMIDI_Interface midi;
