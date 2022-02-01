@@ -87,12 +87,9 @@ void setup() {
 // Update the Control Surface
 void loop() {
   Control_Surface.loop();
-  for (size_t i = 0; i < 5; i++)
+  if (timer)
   {
-    if (timer)
-    {
     sendSliderValues();
-    }
   }
 }
 
