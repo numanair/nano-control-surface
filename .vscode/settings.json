@@ -1,5 +1,12 @@
 {
     "files.associations": {
-        "string": "cpp"
+        "string": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp",
+        "chrono": "cpp",
+        "algorithm": "cpp",
+        "cmath": "cpp"
     }
 }

@@ -8,6 +8,9 @@ const int NUM_SLIDERS = 5;
 // 1 = fully linear but jittery. 0.7 is about max for no jitter.
 const float correctionMultiplier = 0.78;
 
+// measured output every 5mm increment
+int measuredInput[] = {25, 200,  660,  1650, 3628, 5800, 7900, 10180, 12380, 14580, 15690, 16120, 16350};
+
 // MIDI over USB :)
 USBMIDI_Interface midi;
 
@@ -21,10 +24,7 @@ CCPotentiometer volumePotentiometers[] = {
   {A4, {MIDI_CC::Channel_Volume, CHANNEL_5}},
 };
 
-// make sure Control Surface is using 12-bit ADC 
-constexpr uint8_t ADC_BITS = 12;
-
-int measuredInput[] = {25, 200,  660,  1650, 3628, 5800, 7900, 10180, 12380, 14580, 15690, 16120, 16350};
+// Probably no need to change these calculated values
 int idealOutputValues[] = {0,  1365, 2730, 4096, 5461, 6826, 8192, 9557,  10922, 12288, 13653, 15018, 16383};
 // Note: 16383 = 2¹⁴ - 1 (the maximum value that can be represented by
 // a 14-bit unsigned number
@@ -33,7 +33,11 @@ int idealOutputValues[] = {0,  1365, 2730, 4096, 5461, 6826, 8192, 9557,  10922,
 const int arrayQty = sizeof(measuredInput) / sizeof(measuredInput[0]);
 int adjustedinputval[arrayQty] = {0};
 
-Timer<millis> timer = 10; // milliseconds between sending serial data
+// make sure Control Surface is using 12-bit ADC 
+constexpr uint8_t ADC_BITS = 12;
+
+// milliseconds between sending serial data
+Timer<millis> timer = 10;
 
 // note: the _in array must have increasing values
 // same function as MultiMap Arduino library
