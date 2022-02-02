@@ -42,8 +42,7 @@ Timer<millis> timer = 10;
 
 // note: the _in array must have increasing values
 // same function as MultiMap Arduino library
-int multiMap(int val, int* _in, int* _out, uint8_t size)
-{
+int multiMap(int val, int* _in, int* _out, uint8_t size) {
   // take care the value is within range
   // val = constrain(val, _in[0], _in[size-1]);
   if (val <= _in[0]) return _out[0];
@@ -66,31 +65,44 @@ analog_t mappingFunction(analog_t raw) {
     return mapped;
 }
 
+int analogSliderValues[NUM_SLIDERS];
+
 void sendSliderValues();
+void updateSliderValues();
 
 // Initialize the Control Surface
 void setup() {
   for (auto &volumePotentiometers : volumePotentiometers)
-  volumePotentiometers.map(mappingFunction);
+    volumePotentiometers.map(mappingFunction);
   analogReadResolution(12);
   Control_Surface.begin();
-  Serial.begin(115200);
-  // Start serial for Deej
-
+  
   // multiplier correction
-  for (size_t i = 0; i < arrayQty; i++)
-  {
+  for (size_t i = 0; i < arrayQty; i++) {
     adjustedinputval[i] = round(idealOutputValues[i] + (measuredInput[i] - idealOutputValues[i]) * correctionMultiplier);
-    // theoretical ideal + (measured - theoretical)*multi
+    // theoretical ideal + (measured - theoretical) * multi
   }
+
+  // Start serial for Deej
+  Serial.begin(9600);
 }
 
 // Update the Control Surface
 void loop() {
   Control_Surface.loop();
+  
+  // Deej loop
   if (timer)
   {
+    updateSliderValues();
     sendSliderValues();
+  }
+}
+
+void updateSliderValues() {
+  for (int i = 0; i < NUM_SLIDERS; i++) {
+    analogSliderValues[i] = round((multiMap(analogRead(analogInputs[i]) * 4, adjustedinputval, idealOutputValues, arrayQty))) / 16;
+    //analogSliderValues[i] = analogRead(analogInputs[i]); //unfiltered output
   }
 }
 
@@ -98,8 +110,9 @@ void loop() {
 void sendSliderValues() {
   String builtString = String("");
   for (int i = 0; i < NUM_SLIDERS; i++) {
-    // builtString += String((int)volumePotentiometers[i].getRawValue()); // raw
-    builtString += String((int)volumePotentiometers[i].getValue()); // filtered
+    builtString += String((int)round(analogSliderValues[i])); // raw (Deej software does the filtering)
+    // builtString += String((int)round(volumePotentiometers[i].getRawValue() / 16)); // raw (Deej software does the filtering)
+    //builtString += String((int)volumePotentiometers[i].getValue()); // filtered
     if (i < NUM_SLIDERS - 1) {
       builtString += String("|");
     }
