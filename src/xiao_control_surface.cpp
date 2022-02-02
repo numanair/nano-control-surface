@@ -3,6 +3,7 @@
 
 // Number of potentiometers or faders
 const int NUM_SLIDERS = 5;
+pin_t analogInputs[NUM_SLIDERS] = {A0, A1, A2, A3, A4};
 
 // Adjusts linearity correction for my specific potentiometers.
 // 1 = fully linear but jittery. 0.7 is about max for no jitter.
@@ -17,11 +18,11 @@ USBMIDI_Interface midi;
 // Potentiometer array only sends MIDI
 // messages when a value changes
 CCPotentiometer volumePotentiometers[] = {
-  {A0, {MIDI_CC::Channel_Volume, CHANNEL_1}},
-  {A1, {MIDI_CC::Channel_Volume, CHANNEL_2}},
-  {A2, {MIDI_CC::Channel_Volume, CHANNEL_3}},
-  {A3, {MIDI_CC::Channel_Volume, CHANNEL_4}},
-  {A4, {MIDI_CC::Channel_Volume, CHANNEL_5}},
+  {analogInputs[0], {MIDI_CC::Channel_Volume, CHANNEL_1}},
+  {analogInputs[1], {MIDI_CC::Channel_Volume, CHANNEL_2}},
+  {analogInputs[2], {MIDI_CC::Channel_Volume, CHANNEL_3}},
+  {analogInputs[3], {MIDI_CC::Channel_Volume, CHANNEL_4}},
+  {analogInputs[4], {MIDI_CC::Channel_Volume, CHANNEL_5}},
 };
 
 // Probably no need to change these calculated values
