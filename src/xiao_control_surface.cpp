@@ -21,6 +21,7 @@ USBMIDI_Interface midi;
 
 // Potentiometer array only sends MIDI
 // messages when a value changes
+// Set MIDI CC here
 CCPotentiometer volumePotentiometers[] = {
   {analogInputs[0], {0x07, CHANNEL_1}},
   {analogInputs[1], {0x14, CHANNEL_1}},
