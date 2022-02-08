@@ -9,7 +9,7 @@ pin_t analogInputs[NUM_SLIDERS] = {A0, A1, A2, A3, A4};
 
 // Adjusts linearity correction for my specific potentiometers.
 // 1 = fully linear but jittery. 0.7 is about max for no jitter.
-const float correctionMultiplier = 0.78;
+const float correctionMultiplier = 0.85;
 
 // measured output every equal 5mm increment in 14-bit
 float measuredInput[] = {25, 200,  660,  1650, 3628, 5800, 7900, 10180, 12380, 14580, 15690, 16120, 16350};
@@ -17,14 +17,16 @@ float measuredInput[] = {25, 200,  660,  1650, 3628, 5800, 7900, 10180, 12380, 1
 // MIDI over USB :)
 USBMIDI_Interface midi;
 
+// 7, 14, 21, 11, 1
+
 // Potentiometer array only sends MIDI
 // messages when a value changes
 CCPotentiometer volumePotentiometers[] = {
-  {analogInputs[0], {MIDI_CC::Channel_Volume, CHANNEL_1}},
-  {analogInputs[1], {MIDI_CC::Channel_Volume, CHANNEL_2}},
-  {analogInputs[2], {MIDI_CC::Channel_Volume, CHANNEL_3}},
-  {analogInputs[3], {MIDI_CC::Channel_Volume, CHANNEL_4}},
-  {analogInputs[4], {MIDI_CC::Channel_Volume, CHANNEL_5}},
+  {analogInputs[0], {0x07, CHANNEL_1}},
+  {analogInputs[1], {0x14, CHANNEL_1}},
+  {analogInputs[2], {0x21, CHANNEL_1}},
+  {analogInputs[3], {0x11, CHANNEL_1}},
+  {analogInputs[4], {0x01, CHANNEL_1}},
 };
 
 // number of elements in the MultiMap arrays
