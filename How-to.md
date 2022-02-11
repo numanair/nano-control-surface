@@ -10,11 +10,12 @@ How to customize and flash the MIX5R firmware. These instructions are for custom
 <https://platformio.org/install/ide?install=vscode>
 3. Download the MIDI code from Github:
 <https://github.com/numanair/nano-control-surface/tree/seeeduino-xiao-composer>  
-Click the green Code button to find the ZIP download option.  Extract the downloaded ZIP to a project folder of your choosing.
-4. In VS Code, click the house icon in the bottom toolbar to open the PlatformIO home.
-5. Click *Projects* on the left panel of the PlatformIO home. Click the *Add Existing* button and navigate to the extracted folder.
-6. Open the newly added project after it finishes loading it.
-7. To test compilation, click the build button in the bottom toolbar (checkmark icon). A terminal will open showing compilation status. This will be slowest the first time it compiles.
+**NOTE:** there are multiple branches on this Github. If the file names do not match in the next steps make sure you donwloaded from the correct *seeeduino-xiao-composer* branch.
+4. Click the green Code button to find the ZIP download option.  Extract the downloaded ZIP to a project folder of your choosing.
+5. In VS Code, click the house icon in the bottom toolbar to open the PlatformIO home.
+6. Click *Projects* on the left panel of the PlatformIO home. Click the *Add Existing* button and navigate to the extracted folder.
+7. Open the newly added project after it finishes loading it.
+8. To test compilation, click the build button in the bottom toolbar (checkmark icon). A terminal will open showing compilation status. This will be slowest the first time it compiles.
 
 ## Part 2: Modifying the Code
 
@@ -59,5 +60,5 @@ Channel configuration is pretty straight forward. Set the number a the end of th
 
 1. After modifying the MIDI parameters, it is time to test out compilation. Click the checkmark icon in the bottom toolbar. If there are any errors, review what they are and make any fixes before compiling again.
 2. Time to flash the XIAO control board! With the mixer plugged in, click the arrow next to the checkmark to begin compiling and uploading. A window with 3 files might open while the code is uploading (these are just board version info). Give it a minute and it will disappear when done.
-3. Once the board reboots it will reconnect running the new code. Try it out!
+3. Once the board reboots it will reconnect running the new code. Try it out! Depending on your software there may be a step to reconnect or redetect the device.
 4. If something went wrong with the previous upload it could interfere with the flashing process. If the COM port for the MIX5R is no longer showing in Device Manager this may be the issue. Fortunately the XIAO is easy to wipe back to its factory state with the reset button on the back of the MIX5R. With the device connected to the computer, use a pin to click the reset button twice. Give the board a moment to boot and then try flashing the corrected code. **NOTE: this wipes any existing code from the MIX5R.**
