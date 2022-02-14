@@ -9,10 +9,10 @@ pin_t analogInputs[NUM_SLIDERS] = {A0, A1, A2, A3, A4};
 
 // Adjusts linearity correction for my specific potentiometers.
 // 1 = fully linear but jittery. 0.7 is about max for no jitter.
-const float correctionMultiplier = 0.85;
+const float correctionMultiplier = 0.70;
 
-// measured output every equal 5mm increment in 14-bit
-float measuredInput[] = {25, 200,  660,  1650, 3628, 5800, 7900, 10180, 12380, 14580, 15690, 16120, 16350};
+// measured output every equal 5mm increment in 14-bit. Minimum and maximum values are not affected by correctionMultiplier.
+float measuredInput[] = {55, 200,  660,  1650, 3628, 5800, 7900, 10180, 12380, 14580, 15690, 16120, 16350};
 
 // MIDI over USB :)
 USBMIDI_Interface midi;
@@ -87,6 +87,8 @@ void setup() {
     adjustedinputval[i] = round(idealOutputValues[i] + (measuredInput[i] - idealOutputValues[i]) * correctionMultiplier);
     // theoretical ideal + (measured - theoretical) * multi
   }
+  adjustedinputval[0] = measuredInput[0]; // min value
+  adjustedinputval[arrayQty] = measuredInput[arrayQty]; // max value
 
   // Start serial for Deej
   Serial.begin(9600);
