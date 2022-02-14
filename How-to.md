@@ -8,9 +8,9 @@ How to customize and flash the MIX5R firmware. These instructions are for custom
 1. Download Microsoft Visual Studio Code (VS Code) <https://code.visualstudio.com/Download>
 2. Install the PlatformIO extension within VS Code. See instructions here:
 <https://platformio.org/install/ide?install=vscode>
-3. Download the MIDI code from Github:
+3. Download the MIDI code from GitHub:
 <https://github.com/numanair/nano-control-surface/tree/seeeduino-xiao-composer>  
-**NOTE:** there are multiple branches on this Github. If the file names do not match in the next steps make sure you donwloaded from the correct *seeeduino-xiao-composer* branch.
+**NOTE:** there are multiple branches on this GitHub. If the file names do not match in the next steps make sure you downloaded from the correct *seeeduino-xiao-composer* branch.
 4. Click the green Code button to find the ZIP download option.  Extract the downloaded ZIP to a project folder of your choosing.
 5. In VS Code, click the house icon in the bottom toolbar to open the PlatformIO home.
 6. Click *Projects* on the left panel of the PlatformIO home. Click the *Add Existing* button and navigate to the extracted folder.
@@ -19,7 +19,7 @@ How to customize and flash the MIX5R firmware. These instructions are for custom
 
 ## Part 2: Modifying the Code
 
-1. In VS Code, use the *Explorer* tab of the leftmost activity bar to open `src/xiao_control_surface.cpp`. This fileis where the project’s code lives.
+1. In VS Code, use the *Explorer* tab of the leftmost activity bar to open `src/xiao_control_surface.cpp`. This file is where the project’s code lives.
 2. For the purposes of this guide we will only be modifying one part of this file. Find the block of code that looks like so:  
 
 ```CPP
@@ -50,7 +50,7 @@ CCPotentiometer volumePotentiometers[] = {
 
 The list of names is here: <https://tttapa.github.io/Control-Surface-doc/Doxygen/d4/dbe/namespaceMIDI__CC.html>
 
-Sometimes it is easier to set the CC number directly. To do so, add 0x (and a leading zero if single-digit) to the CC number. MIDI CC `7` becomes `0x07`. This allows for setting unamed CC's.
+Sometimes it is easier to set the CC number directly. To do so, add 0x (and a leading zero if single-digit) to the CC number. MIDI CC `7` becomes `0x07`. This allows for setting unnamed CC's.
 
 ### Setting the MIDI Channel
 
