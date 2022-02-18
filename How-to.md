@@ -50,7 +50,7 @@ CCPotentiometer volumePotentiometers[] = {
 
 The list of names is here: <https://tttapa.github.io/Control-Surface-doc/Doxygen/d4/dbe/namespaceMIDI__CC.html>
 
-Sometimes it is easier to set the CC number directly. To do so, add 0x (and a leading zero if single-digit) to the CC number. MIDI CC `7` becomes `0x07`. This allows for setting unnamed CC's.
+Sometimes it is easier to set the CC number directly. The CC numbers are hex. To check available hex values for a CC number look at the table here: <https://www.midi.org/specifications-old/item/table-3-control-change-messages-data-bytes-2> So MIDI CC `14` becomes `0x0E`. This allows for setting unnamed CC's.
 
 ### Setting the MIDI Channel
 
