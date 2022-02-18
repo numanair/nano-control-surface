@@ -11,9 +11,10 @@ This guide will help you convert the MIX5R Deej controller into a MIDI controlle
 5. Follow the instructions in "How to install" to add the board to the IDE: <https://github.com/dbuezas/lgt8fx#how-to-install>
 6. Set all the settings in the IDE *Tools* menu to match the below images. Now is also a good time to select the correct COM port for the board (must be plugged in). ![board selection](board_settings_LGT.png "board selection")  
 ![board settings](board_settings_result.png "board settings")
-7. Open *Tools>Manage Libraries* and search for MultiMap. Click install.
-8. Time to compile! Click the checkmark icon in the top left ("Verify" button) or click *Sketch>Verify/Compile*.
-9. If there are no errors, click the Upload arrow button or *Sketch>Upload*.
+7. Open *Tools>Manage Libraries* and search for **MultiMap**. Click install.
+8. Install the Control Surface library following one of the sections here. "Installation (No Git)" is fine. <https://tttapa.github.io/Control-Surface-doc/Doxygen/d8/da8/md_pages_Installation.html>
+9. Time to compile! Click the checkmark icon in the top left ("Verify" button) or click *Sketch>Verify/Compile*.
+10. If there are no errors, click the Upload arrow button or *Sketch>Upload*.
 
 ## Part 2: Hairless MIDI setup
 
