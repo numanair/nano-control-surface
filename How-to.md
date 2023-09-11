@@ -54,7 +54,7 @@ Sometimes it is easier to set the CC number directly. The CC numbers are hex. To
 
 ### Setting the MIDI Channel
 
-Channel configuration is pretty straight forward. Set the number a the end of the line to the desired channel.
+Channel configuration is pretty straight forward. Set the number at the end of the line to the desired channel.
 
 ## Compiling & Uploading
 
